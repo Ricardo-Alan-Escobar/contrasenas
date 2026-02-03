@@ -109,7 +109,7 @@ export default function PasswordModal({ open, onClose }) {
                 </div>
                 <p className="text-sm text-zinc-400 mb-6 mt-2">Agrega una nueva credencial a tu bóveda segura</p>
                 {/* FORM */}
-                <form onSubmit={submit} className="space-y-5 py-4">
+                <form onSubmit={submit} className="space-y-5 py-4" autoComplete="off">
 
                     <div className='space-y-2'>
                         <Label htmlFor="name" className="text-base font-medium text-card-foreground flex items-center gap-2">
@@ -148,6 +148,7 @@ export default function PasswordModal({ open, onClose }) {
                         className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2"
                         value={data.username}
                         onChange={e => setData('username', e.target.value)}
+                        autoComplete="off"
                         required
                     />
                     </div>
@@ -168,6 +169,7 @@ export default function PasswordModal({ open, onClose }) {
                             className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2 pr-20"
                             value={data.password}
                             onChange={e => setData('password', e.target.value)}
+                            autoComplete="new-password"
                             required
                         />
                         <button
