@@ -1,5 +1,6 @@
 import React from 'react';
 import { Plus, Search } from 'lucide-react';
+import PasswordModal from './passwordModal';
 
 const PasswordManagerUI = () => {
   return (
