@@ -1,6 +1,9 @@
 import { useForm } from '@inertiajs/react';
-import { Tag, Save, X, Ban, Globe, User, LockKeyhole, ChartColumnStacked, FileText } from 'lucide-react';
+import { Tag, Save, X, Ban, Globe, User, LockKeyhole, ChartColumnStacked, FileText, Eye, EyeClosed, Copy, Check } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+import { useState, useEffect  } from 'react';
+import Swal from 'sweetalert2';
+
 
 export default function PasswordModal({ open, onClose }) {
     const { data, setData, post, reset, processing } = useForm({
@@ -13,15 +16,77 @@ export default function PasswordModal({ open, onClose }) {
     });
 
     function submit(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        post('/passwords', {
-            onSuccess: () => {
+    post('/passwords', {
+        onSuccess: () => {
+            Toast.fire({
+                icon: 'success',
+                title: 'Contraseña guardada correctamente',
+            });
+
+            reset();
+            onClose();
+        },
+        onError: () => {
+            Toast.fire({
+                icon: 'error',
+                title: 'Error al guardar la contraseña',
+            });
+        },
+    });
+}
+
+
+                function getStrength(password) {
+                let score = 0;
+                
+                if (password.length >= 8) score++;
+                if (/[A-Z]/.test(password)) score++;
+                if (/[0-9]/.test(password)) score++;
+                if (/[^A-Za-z0-9]/.test(password)) score++;
+                
+                if (score <= 1) return { label: 'Débil', value: 25, color: 'bg-red-500' };
+                if (score === 2) return { label: 'Media', value: 50, color: 'bg-yellow-500' };
+                if (score === 3) return { label: 'Buena', value: 75, color: 'bg-green-500' };
+                
+                return { label: 'Fuerte', value: 100, color: 'bg-green-600' };
+            }
+            
+            const [showPassword, setShowPassword] = useState(false);
+            const [copied, setCopied] = useState(false);
+            const strength = getStrength(data.password);
+            
+            useEffect(() => {
+                if (!open) {
+                    reset();
+                    setShowPassword(false);
+                    setCopied(false);
+                }
+            }, [open]);
+            
+            
+            function handleClose() {
                 reset();
+                setShowPassword(false);
+                setCopied(false);
                 onClose();
+            }
+
+            const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            background: '#18181b', // zinc-900
+            color: '#fff',
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
             },
         });
-    }
+
 
     if (!open) return null;
 
@@ -36,7 +101,7 @@ export default function PasswordModal({ open, onClose }) {
                         Nueva contraseña
                     </h2>
                     <button
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="text-zinc-400 hover:text-white cursor-pointer"
                     >
                         <X size={40} className='hover:bg-zinc-800 rounded-md hover:p-2 p-2'/>
@@ -87,20 +152,69 @@ export default function PasswordModal({ open, onClose }) {
                     />
                     </div>
 
-                     <div className='space-y-2'>
-                        <Label htmlFor="name" className="text-base font-medium text-card-foreground flex items-center gap-2">
-                        <LockKeyhole  className="w-5 h-5 text-green-500" />
-                        Contraseña
-                        </Label>
-                    <input
-                        type="password"
-                        placeholder="Contraseña"
-                        className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2"
-                        value={data.password}
-                        onChange={e => setData('password', e.target.value)}
-                        required
-                    />
+
+
+                     <div className="space-y-2">
+
+                     <Label className="flex items-center gap-2 text-base font-medium">
+                         <LockKeyhole className="w-5 h-5 text-green-500" />
+                         Contraseña
+                     </Label>
+
+                    <div className="relative">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Contraseña"
+                            className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2 pr-20"
+                            value={data.password}
+                            onChange={e => setData('password', e.target.value)}
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute cursor-pointer right-10 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                        >
+                            {showPassword ? <EyeClosed size={18} /> : <Eye size={18} />}
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => {
+                                navigator.clipboard.writeText(data.password);
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Contraseña copiada',
+                                });
+                                setCopied(true);
+                                setTimeout(() => setCopied(false), 1500);
+                            }}
+                            className={`absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer transition
+                                ${copied ? 'text-green-500' : 'text-zinc-400 hover:text-white'}
+                            `}
+                        >
+                            {copied ? <Check size={18} /> : <Copy size={18} />}
+                        </button>
+
                     </div>
+
+                    {data.password && (
+                        <div className="space-y-1">
+                             <p className="text-xs text-zinc-400 flex justify-between">
+                                Fortaleza: <span className="font-medium">{strength.label}</span>
+                            </p>
+                            <div className="h-1.5 w-full bg-zinc-700 rounded overflow-hidden">
+                                <div
+                                    className={`h-full transition-all ${strength.color}`}
+                                    style={{ width: `${strength.value}%` }}
+                                />
+                            </div>
+
+                        </div>
+                    )}
+                </div>
+
+
 
                     <div className='space-y-2'>
                         <Label htmlFor="name" className="text-base font-medium text-card-foreground flex items-center gap-2">
