@@ -40,4 +40,38 @@ class PasswordController extends Controller
 
         return back();
     }
+
+    public function update(Request $request, Password $password)
+    {
+        abort_if($password->user_id !== auth()->id(), 403);
+
+        $request->validate([
+            'site_name' => 'required|string|max:255',
+            'site_url' => 'nullable|url',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string',
+            'category' => 'nullable|string|max:100',
+            'notes' => 'nullable|string',
+        ]);
+
+        $password->update($request->only([
+            'site_name',
+            'site_url',
+            'username',
+            'password',
+            'category',
+            'notes',
+        ]));
+
+        return back();
+    }
+
+    public function destroy(Password $password)
+    {
+        abort_if($password->user_id !== auth()->id(), 403);
+
+        $password->delete();
+
+        return back();
+    }
 }

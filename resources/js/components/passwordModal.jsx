@@ -5,8 +5,8 @@ import { useState, useEffect  } from 'react';
 import Swal from 'sweetalert2';
 
 
-export default function PasswordModal({ open, onClose }) {
-    const { data, setData, post, reset, processing } = useForm({
+export default function PasswordModal({ open, onClose, password }) {
+    const { data, setData, post, put, reset, processing } = useForm({
         site_name: '',
         site_url: '',
         username: '',
@@ -18,23 +18,32 @@ export default function PasswordModal({ open, onClose }) {
     function submit(e) {
     e.preventDefault();
 
-    post('/passwords', {
-        onSuccess: () => {
-            Toast.fire({
-                icon: 'success',
-                title: 'Contraseña guardada correctamente',
-            });
-
-            reset();
-            onClose();
-        },
-        onError: () => {
-            Toast.fire({
-                icon: 'error',
-                title: 'Error al guardar la contraseña',
-            });
-        },
-    });
+    if (password) {
+        // EDITAR
+        put(`/passwords/${password.id}`, {
+            method: 'put',
+            onSuccess: () => {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Contraseña actualizada',
+                });
+                reset();
+                onClose();
+            },
+        });
+    } else {
+        // CREAR
+        post('/passwords', {
+            onSuccess: () => {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Contraseña guardada',
+                });
+                reset();
+                onClose();
+            },
+        });
+    }
 }
 
 
@@ -87,7 +96,18 @@ export default function PasswordModal({ open, onClose }) {
             },
         });
 
-
+useEffect(() => {
+    if (password) {
+        setData({
+            site_name: password.site_name || '',
+            site_url: password.site_url || '',
+            username: password.username || '',
+            password: password.password || '',
+            category: password.category || '',
+            notes: password.notes || '',
+        });
+    }
+}, [password]);
     if (!open) return null;
 
     return (

@@ -1,11 +1,82 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, EyeClosed, Eye, Check, Copy, ExternalLink, Ellipsis, Pencil, Trash  } from 'lucide-react';
 import PasswordModal from '../components/passwordModal';
+import Swal from 'sweetalert2';
+import { router } from '@inertiajs/react';
 
 export default function Dashboard({ passwords = [] }) {
     const [open, setOpen] = useState(false);
+const [showPasswordId, setShowPasswordId] = useState(null);
+const [copiedId, setCopiedId] = useState(null);
+const [openMenuId, setOpenMenuId] = useState(false);
+const [editingPassword, setEditingPassword] = useState(null);
+
+    const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    background: '#18181b',
+    color: '#fff',
+});
+
+function handleDelete(id) {
+    Swal.fire({
+        title: '¿Eliminar contraseña?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+
+        background: '#18181b', // zinc-900
+        color: '#e4e4e7', // zinc-200
+
+        showCancelButton: true,
+
+        confirmButtonColor: '#15803d', // green-700
+        cancelButtonColor: '#27272a', // zinc-800
+
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+
+        iconColor: '#facc15', // amber-400 (warning elegante)
+
+        customClass: {
+            popup: 'rounded-xl',
+            title: 'text-white',
+            htmlContainer: 'text-zinc-400',
+            confirmButton: 'rounded-md px-4 py-2',
+            cancelButton: 'rounded-md px-4 py-2',
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(`/passwords/${id}`, {
+                onSuccess: () => {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+
+                        background: '#18181b',
+                        color: '#e4e4e7',
+
+                        icon: 'success',
+                        iconColor: '#22c55e', // green-500
+
+                        title: 'Contraseña eliminada',
+                        showConfirmButton: false,
+                        timer: 2000,
+
+                        customClass: {
+                            popup: 'rounded-xl',
+                        },
+                    });
+                },
+            });
+        }
+    });
+}
+
 
     return (
         <AppLayout breadcrumbs={[{ title: 'Bóveda' }]}>
@@ -13,7 +84,6 @@ export default function Dashboard({ passwords = [] }) {
 
             <div className="p-6 space-y-6">
 
-                {/* HEADER */}
                 <div className="flex justify-between items-center">
                     <h1 className="text-xl font-semibold text-white">
                         Mis contraseñas
@@ -28,24 +98,148 @@ export default function Dashboard({ passwords = [] }) {
                 </div>
 
                 {/* LISTADO */}
-                <div className="space-y-3">
-                    {passwords.map(p => (
-                        <div key={p.id} className="border border-zinc-700 p-4 rounded">
+             <div className="space-y-3">
+    {passwords.map(p => {
+        const isVisible = showPasswordId === p.id;
+        const isCopied = copiedId === p.id;
+
+        return (
+            <div
+                key={p.id}
+                className="flex items-center justify-between border border-zinc-700 bg-zinc-900 rounded-xl px-5 py-4 hover:border-green-800 transition"
+            >
+                {/* IZQUIERDA */}
+                <div className="flex items-center gap-4">
+                    <div className="w-15 h-15 rounded-full bg-zinc-800 flex items-center justify-center text-white font-semibold text-2xl">
+                        {p.site_name.charAt(0).toUpperCase()}
+                    </div>
+
+                    <div>
+                        <div className="flex items-center gap-2">
                             <h3 className="font-semibold text-white">
                                 {p.site_name}
                             </h3>
-                            <p className="text-sm text-zinc-400">
-                                {p.username}
-                            </p>
+
+                            {p.category && (
+                                <span className="text-xs px-3 py-1.5 rounded-full bg-zinc-800 text-zinc-300">
+                                    {p.category}
+                                </span>
+                            )}
                         </div>
-                    ))}
+
+                        <div className="flex items-center gap-4 mt-0.5">
+                        <p className="text-sm text-zinc-400">
+                            {p.username}
+                        </p>
+
+                        {p.site_url && (
+                            <p className="text-xs text-zinc-500">
+                                {p.site_url.replace(/^https?:\/\//, '')}
+                            </p>
+                        )}
+                        </div>
+                    </div>
                 </div>
+                <div className="flex items-center gap-3">
+                    {/* Password */}
+                    <div className=" flex items-center gap-3 px-3 py-2.5 rounded-md bg-zinc-800 text-sm text-zinc-300 min-w-[90px] text-center">
+                        {isVisible ? p.password : (<span className='text-xl'>• • • • • • • • • • •</span>)}
+                    <button
+                        onClick={() =>
+                            setShowPasswordId(isVisible ? null : p.id)
+                        }
+                        className="text-zinc-400 hover:text-white transition"
+                    >
+                        {isVisible ? <EyeClosed size={18} /> : <Eye size={18} />}
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            navigator.clipboard.writeText(p.password);
+                            setCopiedId(p.id);
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Contraseña copiada',
+                            });
+
+                            setTimeout(() => setCopiedId(null), 1500);
+                        }}
+                        className={`transition ${
+                            isCopied
+                                ? 'text-green-500'
+                                : 'text-zinc-400 hover:text-white'
+                        }`}
+                    >
+                        {isCopied ? <Check size={18} /> : <Copy size={18} />}
+                    </button>
+
+                    </div>
+
+                     {p.site_url && (
+            <a
+                href={p.site_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-400 hover:text-white transition hover:bg-zinc-800 p-3 rounded-md "
+                title="Abrir sitio"
+            >
+                <ExternalLink size={18} />
+            </a>
+        )}
+
+
+        <div className="relative">
+    <button
+        onClick={() =>
+            setOpenMenuId(openMenuId === p.id ? null : p.id)
+        }
+        className="text-zinc-400 hover:text-white flex items-center p-3 rounded-md transition hover:bg-zinc-800"
+    >
+        <Ellipsis size={18} />
+    </button>
+
+    {openMenuId === p.id && (
+        <div className="absolute right-0 mt-2 w-36 rounded-md bg-zinc-800 border border-zinc-700 shadow-lg z-50">
+            <button
+                onClick={() => {
+                    setEditingPassword(p);
+                    setOpen(true);
+                    setOpenMenuId(null);
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-zinc-700"
+            >
+                <Pencil size={14} /> Editar
+            </button>
+
+            <button
+                onClick={() => handleDelete(p.id)}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-zinc-700"
+            >
+                <Trash size={14} /> Eliminar
+            </button>
+        </div>
+    )}
+</div>
+
+
+                </div>
+            </div>
+        );
+    })}
+</div>
+
+
 
                 {/* MODAL */}
                 <PasswordModal
-                    open={open}
-                    onClose={() => setOpen(false)}
-                />
+    open={open}
+    onClose={() => {
+        setOpen(false);
+        setEditingPassword(null);
+    }}
+    password={editingPassword}
+/>
 
             </div>
         </AppLayout>

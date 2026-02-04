@@ -16,6 +16,8 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [PasswordController::class, 'index'])->name('dashboard');
     Route::post('/passwords', [PasswordController::class, 'store'])->name('passwords.store');
+    Route::put('/passwords/{password}', [PasswordController::class, 'update'])->name('passwords.update');
+    Route::delete('/passwords/{password}', [PasswordController::class, 'destroy'])->name('passwords.destroy');
 });
 
 require __DIR__.'/settings.php';
