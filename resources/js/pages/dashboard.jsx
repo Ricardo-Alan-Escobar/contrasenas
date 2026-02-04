@@ -28,20 +28,14 @@ function handleDelete(id) {
         title: '¿Eliminar contraseña?',
         text: 'Esta acción no se puede deshacer',
         icon: 'warning',
-
-        background: '#18181b', // zinc-900
-        color: '#e4e4e7', // zinc-200
-
+        background: '#18181b', 
+        color: '#e4e4e7', 
         showCancelButton: true,
-
-        confirmButtonColor: '#15803d', // green-700
-        cancelButtonColor: '#27272a', // zinc-800
-
+        confirmButtonColor: '#15803d', 
+        cancelButtonColor: '#27272a', 
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar',
-
-        iconColor: '#facc15', // amber-400 (warning elegante)
-
+        iconColor: '#facc15', 
         customClass: {
             popup: 'rounded-xl',
             title: 'text-white',
@@ -56,17 +50,13 @@ function handleDelete(id) {
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
-
                         background: '#18181b',
                         color: '#e4e4e7',
-
                         icon: 'success',
-                        iconColor: '#22c55e', // green-500
-
+                        iconColor: '#22c55e', 
                         title: 'Contraseña eliminada',
                         showConfirmButton: false,
                         timer: 2000,
-
                         customClass: {
                             popup: 'rounded-xl',
                         },
@@ -85,10 +75,12 @@ function handleDelete(id) {
             <div className="p-6 space-y-6">
 
                 <div className="flex justify-between items-center">
-                    <h1 className="text-xl font-semibold text-white">
+                    <div>                  <h1 className="text-xl font-semibold text-white">
                         Mis contraseñas
                     </h1>
-
+                    <p className="text-xs text-zinc-400">Todas tus contraseñas seguras en un solo lugar</p>
+                    </div>
+  
                     <button
                         onClick={() => setOpen(true)}
                         className="w-44 cursor-pointer p-2 flex items-center justify-center text-sm text-white bg-green-900 rounded-md hover:bg-green-700 transition"
@@ -148,7 +140,7 @@ function handleDelete(id) {
                         onClick={() =>
                             setShowPasswordId(isVisible ? null : p.id)
                         }
-                        className="text-zinc-400 hover:text-white transition"
+                        className="text-zinc-400 hover:text-white transition cursor-pointer"
                     >
                         {isVisible ? <EyeClosed size={18} /> : <Eye size={18} />}
                     </button>
@@ -168,7 +160,7 @@ function handleDelete(id) {
                         className={`transition ${
                             isCopied
                                 ? 'text-green-500'
-                                : 'text-zinc-400 hover:text-white'
+                                : 'text-zinc-400 hover:text-white cursor-pointer'
                         }`}
                     >
                         {isCopied ? <Check size={18} /> : <Copy size={18} />}
@@ -194,7 +186,7 @@ function handleDelete(id) {
         onClick={() =>
             setOpenMenuId(openMenuId === p.id ? null : p.id)
         }
-        className="text-zinc-400 hover:text-white flex items-center p-3 rounded-md transition hover:bg-zinc-800"
+        className="text-zinc-400 cursor-pointer hover:text-white flex items-center p-3 rounded-md transition hover:bg-zinc-800"
     >
         <Ellipsis size={18} />
     </button>
@@ -207,14 +199,14 @@ function handleDelete(id) {
                     setOpen(true);
                     setOpenMenuId(null);
                 }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-zinc-700"
+                className="w-11/12 cursor-pointer m-1 text-zinc-400 flex items-center gap-2 px-3 py-2 text-sm hover:bg-zinc-700 rounded-md"
             >
                 <Pencil size={14} /> Editar
             </button>
 
             <button
                 onClick={() => handleDelete(p.id)}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-zinc-700"
+                className="w-11/12 m-1 flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-red-700 hover:bg-zinc-700 rounded-md"
             >
                 <Trash size={14} /> Eliminar
             </button>
@@ -228,8 +220,6 @@ function handleDelete(id) {
         );
     })}
 </div>
-
-
 
                 {/* MODAL */}
                 <PasswordModal
