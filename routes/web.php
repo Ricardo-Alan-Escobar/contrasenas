@@ -18,6 +18,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/passwords', [PasswordController::class, 'store'])->name('passwords.store');
     Route::put('/passwords/{password}', [PasswordController::class, 'update'])->name('passwords.update');
     Route::delete('/passwords/{password}', [PasswordController::class, 'destroy'])->name('passwords.destroy');
+
+    Route::get('/generador', function () {
+        return Inertia::render('generador');
+    })->name('generador');
 });
 
 require __DIR__.'/settings.php';

@@ -23,33 +23,24 @@ const mainNavItems = [
         icon: Key,
     },
     {
-        title: 'Favoritos',
-        href: dashboard(),
-        icon: Star,
-    },
-    {
         title: 'Auditoria',
         href: dashboard(),
         icon: TriangleAlert,
     },
      {
         title: 'Generador',
-        href: dashboard(),
+        href: '/generador',
         icon: TrendingUp,
     },
 ];
 
 const footerNavItems = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
+        title: 'Documentación',
+        href: 'https://github.com/Ricardo-Alan-Escobar/contrasenas',
         icon: Folder,
     },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
+    
 ];
 
 export function AppSidebar() {
