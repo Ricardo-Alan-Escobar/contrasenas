@@ -74,4 +74,12 @@ class PasswordController extends Controller
 
         return back();
     }
+
+    public function audit()
+{
+    return Inertia::render('auditoria', [
+        'passwords' => Password::where('user_id', auth()->id())->get(),
+    ]);
+}
+
 }

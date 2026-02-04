@@ -24,7 +24,7 @@ const mainNavItems = [
     },
     {
         title: 'Auditoria',
-        href: dashboard(),
+        href: '/auditoria',
         icon: TriangleAlert,
     },
      {

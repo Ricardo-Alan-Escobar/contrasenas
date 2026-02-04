@@ -22,6 +22,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/generador', function () {
         return Inertia::render('generador');
     })->name('generador');
+
+    Route::get('/auditoria', [PasswordController::class, 'audit'])
+    ->middleware(['auth'])
+    ->name('auditoria');
 });
 
 require __DIR__.'/settings.php';
