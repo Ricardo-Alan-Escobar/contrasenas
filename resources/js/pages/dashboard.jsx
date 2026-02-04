@@ -12,6 +12,7 @@ const [showPasswordId, setShowPasswordId] = useState(null);
 const [copiedId, setCopiedId] = useState(null);
 const [openMenuId, setOpenMenuId] = useState(false);
 const [editingPassword, setEditingPassword] = useState(null);
+const [searchTerm, setSearchTerm] = useState('');
 
     const Toast = Swal.mixin({
     toast: true,
@@ -66,6 +67,15 @@ function handleDelete(id) {
         }
     });
 }
+const filteredPasswords = passwords.filter(p => {
+    const search = searchTerm.toLowerCase();
+    return (
+        p.site_name.toLowerCase().includes(search) ||
+        p.username.toLowerCase().includes(search) ||
+        (p.category && p.category.toLowerCase().includes(search)) ||
+        (p.site_url && p.site_url.toLowerCase().includes(search))
+    );
+});
 
 
     return (
@@ -81,17 +91,32 @@ function handleDelete(id) {
                     <p className="text-xs text-zinc-400">Todas tus contraseñas seguras en un solo lugar</p>
                     </div>
   
-                    <button
-                        onClick={() => setOpen(true)}
-                        className="w-44 cursor-pointer p-2 flex items-center justify-center text-sm text-white bg-green-900 rounded-md hover:bg-green-700 transition"
-                    >
-                        <Plus className="mr-2" size={18} /> Agregar
-                    </button>
+                    <div className="flex items-center gap-3">
+    {/* Barra de búsqueda */}
+    <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
+        <input
+            type="text"
+            placeholder="Buscar contraseñas..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-64 pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 rounded-md text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-green-800 transition"
+        />
+    </div>
+
+    <button
+        onClick={() => setOpen(true)}
+        className="w-44 cursor-pointer p-2 flex items-center justify-center text-sm text-white bg-green-900 rounded-md hover:bg-green-700 transition"
+    >
+        <Plus className="mr-2" size={18} /> Agregar
+    </button>
+</div>
                 </div>
 
                 {/* LISTADO */}
-             <div className="space-y-3">
-    {passwords.map(p => {
+            <div className="space-y-3">
+    {filteredPasswords.length > 0 ? (
+        filteredPasswords.map(p => {
         const isVisible = showPasswordId === p.id;
         const isCopied = copiedId === p.id;
 
@@ -218,7 +243,20 @@ function handleDelete(id) {
                 </div>
             </div>
         );
-    })}
+    })) : (
+        <div className="text-center py-12">
+            <Search className="mx-auto text-zinc-600 mb-4" size={48} />
+            <h3 className="text-lg font-semibold text-zinc-400 mb-2">
+                No se encontraron resultados
+            </h3>
+            <p className="text-sm text-zinc-500">
+                {searchTerm 
+                    ? `No hay contraseñas que coincidan con "${searchTerm}"`
+                    : 'No tienes contraseñas guardadas aún'
+                }
+            </p>
+        </div>
+    )}
 </div>
 
                 {/* MODAL */}
