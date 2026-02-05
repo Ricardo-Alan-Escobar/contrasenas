@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, Star, Key, TriangleAlert, TrendingUp, Search } from 'lucide-react';
+import { BookOpen, Folder, Star, Key, TriangleAlert, TrendingUp, Package, OctagonAlert, ChartColumn } from 'lucide-react';
 import AppLogo from './app-logo';
 import SearchBar from '@/components/SearchBar';
 
@@ -27,10 +27,28 @@ const mainNavItems = [
         href: '/auditoria',
         icon: TriangleAlert,
     },
-     {
+    {
         title: 'Generador',
         href: '/generador',
         icon: TrendingUp,
+    },
+];
+
+const secondaryNavItems = [
+    {
+        title: 'Inventario',
+        href: '/configuracion',
+        icon: Package,
+    },
+    {
+        title: 'Stok Bajo',
+        href: '/configuracion',
+        icon: OctagonAlert,
+    },
+    {
+        title: 'Inventario',
+        href: '/configuracion',
+        icon: ChartColumn,
     },
 ];
 
@@ -40,12 +58,10 @@ const footerNavItems = [
         href: 'https://github.com/Ricardo-Alan-Escobar/contrasenas',
         icon: Folder,
     },
-    
 ];
 
 export function AppSidebar() {
     return (
-
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
@@ -57,13 +73,16 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                  
             </SidebarHeader>
             <div className="my-2 border-t border-zinc-800" />
             <SidebarContent>
-        <SearchBar />
-                <NavMain items={mainNavItems} />
-             
+                <SearchBar />
+                
+                {/* Primer menú */}
+                <NavMain items={mainNavItems} title="PRINCIPAL" />
+                
+                {/* Segundo menú con título diferente */}
+                <NavMain items={secondaryNavItems} title="INVENTARIO" />
             </SidebarContent>
 
             <SidebarFooter>
