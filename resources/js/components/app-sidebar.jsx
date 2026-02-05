@@ -37,7 +37,7 @@ const mainNavItems = [
 const secondaryNavItems = [
     {
         title: 'Inventario',
-        href: '/configuracion',
+        href: '/inventario',
         icon: Package,
     },
     {
@@ -46,7 +46,7 @@ const secondaryNavItems = [
         icon: OctagonAlert,
     },
     {
-        title: 'Inventario',
+        title: 'Reportes',
         href: '/configuracion',
         icon: ChartColumn,
     },

@@ -217,7 +217,7 @@ const filteredPasswords = passwords.filter(p => {
     </button>
 
     {openMenuId === p.id && (
-        <div className="absolute right-0 mt-2 w-36 rounded-md bg-zinc-800 border border-zinc-700 shadow-lg z-50">
+        <div className="absolute flex flex-col justify-center items-center right-0 mt-2 w-36 rounded-md bg-zinc-800 border border-zinc-700 shadow-lg z-50">
             <button
                 onClick={() => {
                     setEditingPassword(p);

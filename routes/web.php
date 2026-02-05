@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\InventarioController;
 
 // Ruta pública
 Route::get('/', function () {
@@ -26,6 +27,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/auditoria', [PasswordController::class, 'audit'])
     ->middleware(['auth'])
     ->name('auditoria');
+
+    Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
+    Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
+
+
 });
 
 require __DIR__.'/settings.php';
