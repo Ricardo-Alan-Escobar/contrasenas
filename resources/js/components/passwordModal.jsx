@@ -127,9 +127,9 @@ useEffect(() => {
                         <X size={40} className='hover:bg-zinc-800 rounded-md hover:p-2 p-2'/>
                     </button>
                 </div>
-                <p className="text-sm text-zinc-400 mb-6 mt-2">Agrega una nueva credencial a tu bóveda segura</p>
+                <p className="text-sm text-zinc-400 mb-4">Agrega una nueva credencial a tu bóveda segura</p>
                 {/* FORM */}
-                <form onSubmit={submit} className="space-y-5 py-4" autoComplete="off">
+                <form onSubmit={submit} className="space-y-2" autoComplete="off">
 
                     <div className='space-y-2'>
                         <Label htmlFor="name" className="text-base font-medium text-card-foreground flex items-center gap-2">
