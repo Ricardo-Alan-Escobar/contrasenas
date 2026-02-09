@@ -55,4 +55,15 @@ class InventarioController extends Controller
 
         return redirect()->back();
     }
+    public function stockBajo()
+{
+    return Inertia::render('stokbajo', [
+        'items' => Inventario::where(function($query) {
+            $query->whereRaw('cantidad_inicial <= stock_minimo')
+                  ->orWhere('cantidad_inicial', 0);
+        })
+        ->orderBy('cantidad_inicial', 'asc')
+        ->get(),
+    ]);
+}
 }

@@ -42,7 +42,7 @@ const secondaryNavItems = [
     },
     {
         title: 'Stok Bajo',
-        href: '/configuracion',
+        href: '/stokbajo',
         icon: OctagonAlert,
     },
     {
