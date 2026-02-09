@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
     Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
+    Route::put('/inventario/{inventario}', [InventarioController::class, 'update'])->name('inventario.update');
+    Route::delete('/inventario/{inventario}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
 
 
 });

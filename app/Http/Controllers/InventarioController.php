@@ -17,18 +17,42 @@ class InventarioController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'modelo' => 'required|string|max:255',
             'marca' => 'required|string|max:255',
-            'color' => 'nullable|string|max:100',
+            'color' => 'required|string|max:100',
             'cantidad_inicial' => 'required|integer|min:0',
             'stock_minimo' => 'required|integer|min:0',
             'precio_compra' => 'required|numeric|min:0',
             'precio_venta' => 'required|numeric|min:0',
         ]);
 
-        Inventario::create($request->all());
+        Inventario::create($validated);
 
-        return back();
+        return redirect()->back();
+    }
+
+    public function update(Request $request, Inventario $inventario)
+    {
+        $validated = $request->validate([
+            'modelo' => 'required|string|max:255',
+            'marca' => 'required|string|max:255',
+            'color' => 'required|string|max:100',
+            'cantidad_inicial' => 'required|integer|min:0',
+            'stock_minimo' => 'required|integer|min:0',
+            'precio_compra' => 'required|numeric|min:0',
+            'precio_venta' => 'required|numeric|min:0',
+        ]);
+
+        $inventario->update($validated);
+
+        return redirect()->back();
+    }
+
+    public function destroy(Inventario $inventario)
+    {
+        $inventario->delete();
+
+        return redirect()->back();
     }
 }
