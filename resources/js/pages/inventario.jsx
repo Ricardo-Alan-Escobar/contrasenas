@@ -202,7 +202,7 @@ export default function Inventario({ items }) {
                                 className="pl-10 pr-4 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-700 transition w-64"
                             />
                         </div>
-
+ 
                         <button
                             onClick={() => {
                                 setSelectedToner(null);

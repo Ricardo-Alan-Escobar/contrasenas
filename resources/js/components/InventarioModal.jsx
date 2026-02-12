@@ -43,7 +43,7 @@ export default function InventarioModal({ open, onClose, toner }) {
                     });
                     reset();
                     onClose();
-                },
+                }, 
             });
         } else {
             // CREAR
@@ -61,24 +61,20 @@ export default function InventarioModal({ open, onClose, toner }) {
     }
 
     useEffect(() => {
-        if (toner) {
-            setData({
-                modelo: toner.modelo || '',
-                marca: toner.marca || '',
-                color: toner.color || '',
-                cantidad_inicial: toner.cantidad_inicial || '',
-                stock_minimo: toner.stock_minimo || '',
-                precio_compra: toner.precio_compra || '',
-                precio_venta: toner.precio_venta || '',
-            });
-        }
-    }, [toner]);
-
-    useEffect(() => {
-        if (!open) {
-            reset();
-        }
-    }, [open]);
+    if (open && toner) {
+        setData({
+            modelo: toner.modelo || '',
+            marca: toner.marca || '',
+            color: toner.color || '',
+            cantidad_inicial: toner.cantidad_inicial || '',
+            stock_minimo: toner.stock_minimo || '',
+            precio_compra: toner.precio_compra || '',
+            precio_venta: toner.precio_venta || '',
+        });
+    } else if (open && !toner) {
+        reset();
+    }
+}, [toner, open]);
 
     function handleClose() {
         reset();
@@ -125,75 +121,46 @@ export default function InventarioModal({ open, onClose, toner }) {
                     </div>
 
                     <div className='space-y-2 space-x-6 flex'>
-                       <div>
-                           <Label className="text-base font-medium text-card-foreground flex items-center gap-2 mb-2">
-                               <Tag className="w-5 h-5 text-green-500" />
-                               Marca
-                           </Label>
-                           <Select 
-                               value={data.marca} 
-                               onValueChange={(value) => setData('marca', value)}
+                 <div className="flex-1">
+                     <Label className="text-base font-medium text-card-foreground flex items-center gap-2 mb-2">
+                         <Tag className="w-5 h-5 text-green-500" />
+                         Marca
+                     </Label>
+                     <select
+                         value={data.marca}
+                         onChange={(e) => setData('marca', e.target.value)}
+                         className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2 text-white"
+                         required
+                     >
+                         <option value="">Selecciona una marca</option>
+                         <option value="HP">HP</option>
+                         <option value="Canon">Canon</option>
+                         <option value="Brother">Brother</option>
+                         <option value="Epson">Epson</option>
+                         <option value="Samsung">Samsung</option>
+                         <option value="Xerox">Xerox</option>
+                     </select>
+                 </div>
+
+                 <div className="flex-1">
+                     <Label className="text-base font-medium text-card-foreground flex items-center gap-2 mb-2">
+                         <Palette className="w-5 h-5 text-green-500" />
+                         Color
+                     </Label>
+                           <select
+                               value={data.color}
+                               onChange={(e) => setData('color', e.target.value)}
+                               className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2 text-white"
+                               required
                            >
-                               <SelectTrigger className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2">
-                                   <SelectValue placeholder="Selecciona una marca" />
-                               </SelectTrigger>
-                               <SelectContent>
-                                   <SelectItem value="HP">HP</SelectItem>
-                                   <SelectItem value="Canon">Canon</SelectItem>
-                                   <SelectItem value="Brother">Brother</SelectItem>
-                                   <SelectItem value="Epson">Epson</SelectItem>
-                                   <SelectItem value="Samsung">Samsung</SelectItem>
-                                   <SelectItem value="Xerox">Xerox</SelectItem>
-                               </SelectContent>
-                           </Select>
+                               <option value="">Selecciona un color</option>
+                               <option value="Negro">Negro</option>
+                               <option value="Cyan">Cyan</option>
+                               <option value="Magenta">Magenta</option>
+                               <option value="Amarillo">Amarillo</option>
+                               <option value="Tricolor">Tricolor</option>
+                           </select>
                        </div>
-    
-                   <div>
-                    <Label className="text-base font-medium text-card-foreground flex items-center gap-2 mb-2">
-                        <Palette className="w-5 h-5 text-green-500" />
-                        Color
-                    </Label>
-                    <Select 
-                        value={data.color} 
-                        onValueChange={(value) => setData('color', value)}
-                    >
-                        <SelectTrigger className="bg-secondary border-border focus:border-green-500 focus:ring-green-500 rounded-md w-full p-2">
-                            <SelectValue placeholder="Selecciona un color" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Negro">
-                                <span className="flex items-center gap-2">
-                                    <span className="w-3 h-3 rounded-full bg-black"></span>
-                                    Negro
-                                </span>
-                            </SelectItem>
-                            <SelectItem value="Cyan">
-                            <span className="flex items-center gap-2">
-                                            <span className="w-3 h-3 rounded-full bg-cyan-500"></span>
-                                            Cyan
-                                        </span>
-                                    </SelectItem>
-                                    <SelectItem value="Magenta">
-                                        <span className="flex items-center gap-2">
-                                            <span className="w-3 h-3 rounded-full bg-fuchsia-500"></span>
-                                            Magenta
-                                        </span>
-                                    </SelectItem>
-                                    <SelectItem value="Amarillo">
-                                        <span className="flex items-center gap-2">
-                                            <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
-                                            Amarillo
-                                        </span>
-                                    </SelectItem>
-                                    <SelectItem value="Tricolor">
-                                        <span className="flex items-center gap-2">
-                                            <span className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-yellow-400"></span>
-                                            Tricolor
-                                        </span>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
                     </div>
 
                     <div className='space-y-2 space-x-6 flex'>
