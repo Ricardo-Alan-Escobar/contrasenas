@@ -92,10 +92,12 @@ export default function Reportes({ items }) {
 
                     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-zinc-400 mb-1">Valor del Inventario</p>
-                                <p className="text-3xl font-bold text-white">${stats.totalValue.toFixed(2)}</p>
-                            </div>
+                           <div>
+                            <p className="text-sm text-zinc-400 mb-1">Valor del Inventario</p>
+                            <p className="text-3xl font-bold text-white">
+                                ${stats.totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </p>
+                        </div>
                             <div className="p-3 rounded-xl bg-yellow-500/10">
                                 <DollarSign className="w-6 h-6 text-yellow-500" />
                             </div>
