@@ -66,4 +66,11 @@ class InventarioController extends Controller
         ->get(),
     ]);
 }
+
+public function reportes()
+{
+    return Inertia::render('reportes', [
+        'items' => Inventario::orderBy('created_at', 'desc')->get(),
+    ]);
+}
 }

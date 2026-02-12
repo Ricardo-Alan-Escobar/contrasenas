@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/inventario/{inventario}', [InventarioController::class, 'update'])->name('inventario.update');
     Route::delete('/inventario/{inventario}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
     Route::get('/stokbajo', [InventarioController::class, 'stockBajo'])->name('stokbajo');
+    Route::get('/reportes', [InventarioController::class, 'reportes'])->name('reportes');
 
 
 });

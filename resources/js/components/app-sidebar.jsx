@@ -47,7 +47,7 @@ const secondaryNavItems = [
     },
     {
         title: 'Reportes',
-        href: '/configuracion',
+        href: '/reportes',
         icon: ChartColumn,
     },
 ];
